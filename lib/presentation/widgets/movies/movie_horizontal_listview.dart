@@ -24,22 +24,30 @@ class MovieHorizontalListview extends StatefulWidget {
 }
 
 class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
+  
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (widget.loadNextPage == null) return;
+      if (scrollController.position.pixels + 200 >=
+          scrollController.position.maxScrollExtent) {
+        print('Cargando más películas...');
+        widget.loadNextPage!();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController();
-    @override
-    void initState() {
-      super.initState();
-      scrollController.addListener(() {
-        if (widget.loadNextPage == null) return;
-        if (scrollController.position.pixels + 200 >=
-            scrollController.position.maxScrollExtent) {
-          print('Cargando las pelis xd saquen el vicio');
-          widget.loadNextPage!();
-        }
-      });
-    }
-
     return SizedBox(
       height: 350,
       child: Column(
@@ -79,7 +87,7 @@ class _Slide extends StatelessWidget {
         children: [
           SizedBox(
             width: 150,
-            height: 220, // ✅ altura controlada
+            height: 220,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.network(
@@ -101,7 +109,11 @@ class _Slide extends StatelessWidget {
           const SizedBox(height: 5),
           SizedBox(
             width: 150,
-            child: Text(movie.title, maxLines: 2, style: textStyles.titleSmall),
+            child: Text(
+              movie.title,
+              maxLines: 2,
+              style: textStyles.titleSmall,
+            ),
           ),
           SizedBox(
             width: 150,
@@ -134,16 +146,18 @@ class _CurrDate extends StatelessWidget {
   final String? formateDate;
 
   const _CurrDate({this.place, this.formateDate});
+
   @override
   Widget build(BuildContext context) {
     final placeStyle = Theme.of(context).textTheme.titleLarge;
+
     return Container(
       padding: const EdgeInsets.only(top: 10),
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: [
           if (place != null) Text(place!, style: placeStyle),
-          Spacer(),
+          const Spacer(),
           if (formateDate != null)
             FilledButton.tonal(onPressed: () {}, child: Text(formateDate!)),
         ],

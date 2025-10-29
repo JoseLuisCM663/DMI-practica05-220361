@@ -3,6 +3,7 @@ import 'package:cinemapedia_220361/presentation/providers/providers.dart';
 import 'package:cinemapedia_220361/presentation/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 /// Pantalla principal de la aplicación que muestra las películas en cartelera.
 ///
@@ -51,19 +52,51 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies=ref.watch(moviesSlideShowProvider);
+    final String today = DateFormat('EEEE, d \'de\' MMMM', 'es_ES').format(DateTime.now());
 
-    return Column(
-      children: [
-        CustomAppbar(),
-
-        MovieSlidershow(movies: slideShowMovies),
-        MovieHorizontalListview(movies:nowPlayingMovies,
-        title: "En cines",
-        subtitle: "miercoles,22 de octubre",
-        loadNextPage:(){
-          print('Evento');
-        })
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CustomAppbar(),
+          MovieSlidershow(movies: slideShowMovies),
+          MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: "En cines",
+            subtitle: today, 
+            loadNextPage: () =>
+                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+          ),
+            MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: "Proximamente",
+            subtitle: "today", 
+            loadNextPage: () =>
+                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+          ),
+            MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: "Populares",
+            subtitle: "today", 
+            loadNextPage: () =>
+                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+          ),
+            MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: "Mejor valoradas",
+            subtitle: "today", 
+            loadNextPage: () =>
+                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+          ),
+            MovieHorizontalListview(
+            movies: nowPlayingMovies,
+            title: "Mexicanas",
+            subtitle: "today", 
+            loadNextPage: () =>
+                ref.read(nowPlayingMoviesProvider.notifier).loadNextPage(),
+          ),
+          const SizedBox(height: 40,)
+        ],
+      ),
     );
   }
 }
