@@ -1,8 +1,10 @@
 /// Entidad que representa una película en el dominio de la aplicación.
-/// 
+
+///
 /// Esta clase define la estructura de datos de una película que usa
 /// la lógica de negocio, independiente de cómo se almacene o se obtenga.
-/// 
+///
+
 /// **Propósito:**
 /// - Modelo de datos puro sin dependencias externas
 /// - Representa el concepto de "película" en el negocio
@@ -39,4 +41,5 @@ class Movie {
     required this.voteAverage,
     required this.voteCount,
   });
+
 }

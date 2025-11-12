@@ -1,5 +1,5 @@
-import 'package:cinemapedia_220361/infrastructure/models/moviedb/movie_moviedb.dart';
 import 'package:cinemapedia_220361/domain/entities/movie.dart';
+import 'package:cinemapedia_220361/infrastructure/models/moviedb/movie_moviedb.dart';
 
 /// Mapper que convierte modelos de datos externos a entidades de dominio.
 ///

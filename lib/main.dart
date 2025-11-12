@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+
 /// Función principal que inicializa la aplicación Flutter.
 ///
 /// **Configuraciones iniciales:**
@@ -17,6 +18,7 @@ Future<void> main() async {
   /// Necesario para acceder a API keys y configuraciones sensibles
   await dotenv.load(fileName: '.env');
   await initializeDateFormatting('es_ES', null);
+
   /// Inicia la aplicación envuelta en ProviderScope
   /// Esto permite el uso de Riverpod en toda la jerarquía de widgets
   runApp(const ProviderScope(child: MainApp()));

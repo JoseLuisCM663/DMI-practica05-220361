@@ -1,20 +1,23 @@
+
+import 'package:cinemapedia_220361/config/helpers/human_formats.dart';
 import 'package:cinemapedia_220361/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-
-import '../../../config/helpers/human_formants.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
-  final String? subtitle;
+
+  final String? subTitle;
   final VoidCallback? loadNextPage;
 
   const MovieHorizontalListview({
     super.key,
     required this.movies,
     this.title,
-    this.subtitle,
+
+    this.subTitle,
     this.loadNextPage,
   });
 
@@ -24,9 +27,8 @@ class MovieHorizontalListview extends StatefulWidget {
 }
 
 class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
-  
-  final ScrollController scrollController = ScrollController();
 
+  final scrollController = ScrollController();
   @override
   void initState() {
     super.initState();
@@ -34,7 +36,8 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
       if (widget.loadNextPage == null) return;
       if (scrollController.position.pixels + 200 >=
           scrollController.position.maxScrollExtent) {
-        print('Cargando más películas...');
+
+        print('Cargando las peliculas siguientes');
         widget.loadNextPage!();
       }
     });
@@ -49,11 +52,12 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+
+      height: 360,
       child: Column(
         children: [
-          if (widget.title != null || widget.subtitle != null)
-            _CurrDate(place: widget.title, formateDate: widget.subtitle),
+          if (widget.title != null || widget.subTitle != null)
+            _CurrDate(place: widget.title, formatedDate: widget.subTitle),
 
           Expanded(
             child: ListView.builder(
@@ -72,6 +76,9 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   }
 }
 
+
+// ---------------- SLIDE ----------------
+
 class _Slide extends StatelessWidget {
   final Movie movie;
   const _Slide({required this.movie});
@@ -84,14 +91,20 @@ class _Slide extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
+        mainAxisSize: MainAxisSize.min,
         children: [
+          // Poster
           SizedBox(
             width: 150,
-            height: 220,
+            height: 215,
+
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.network(
                 movie.posterPath,
+
+                fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress != null) {
                     return const Padding(
@@ -101,25 +114,44 @@ class _Slide extends StatelessWidget {
                       ),
                     );
                   }
-                  return FadeIn(child: child);
+
+                  return GestureDetector(
+                    onTap: () => context.push('/movie/${movie.id}'),
+                    child: FadeIn(child: child),
+                  );
                 },
               ),
             ),
           ),
+
+
           const SizedBox(height: 5),
+
+          // Title
           SizedBox(
             width: 150,
             child: Text(
               movie.title,
               maxLines: 2,
+
+              overflow: TextOverflow.ellipsis,
               style: textStyles.titleSmall,
             ),
           ),
+
+          const SizedBox(height: 3),
+
+          // Rating
           SizedBox(
             width: 150,
             child: Row(
               children: [
-                Icon(Icons.star_half_outlined, color: Colors.yellow.shade800),
+
+                Icon(
+                  Icons.star_half_outlined,
+                  color: Colors.yellow.shade800,
+                  size: 16,
+                ),
                 const SizedBox(width: 3),
                 Text(
                   '${movie.voteAverage}',
@@ -127,9 +159,10 @@ class _Slide extends StatelessWidget {
                     color: Colors.yellow.shade800,
                   ),
                 ),
-                const Spacer(),
+
+                Spacer(),
                 Text(
-                  HumanFormants.humanReadbleNumber(movie.popularity),
+                  HumanFormats.humanReadbleNumber(movie.popularity),
                   style: textStyles.bodySmall,
                 ),
               ],
@@ -141,11 +174,14 @@ class _Slide extends StatelessWidget {
   }
 }
 
+
+// ---------------- HEADER ----------------
+
 class _CurrDate extends StatelessWidget {
   final String? place;
-  final String? formateDate;
+  final String? formatedDate;
 
-  const _CurrDate({this.place, this.formateDate});
+  const _CurrDate({this.place, this.formatedDate});
 
   @override
   Widget build(BuildContext context) {
@@ -158,8 +194,9 @@ class _CurrDate extends StatelessWidget {
         children: [
           if (place != null) Text(place!, style: placeStyle),
           const Spacer(),
-          if (formateDate != null)
-            FilledButton.tonal(onPressed: () {}, child: Text(formateDate!)),
+
+          if (formatedDate != null)
+            FilledButton.tonal(onPressed: () {}, child: Text(formatedDate!)),
         ],
       ),
     );

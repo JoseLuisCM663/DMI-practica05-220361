@@ -1,6 +1,6 @@
-import 'package:cinemapedia_220361/domain/repositories/movies_repository.dart';
 import 'package:cinemapedia_220361/domain/datasources/movies_datasource.dart';
 import 'package:cinemapedia_220361/domain/entities/movie.dart';
+import 'package:cinemapedia_220361/domain/repositories/movies_repository.dart';
 
 /// Implementación concreta del repositorio de películas.
 ///
@@ -15,12 +15,27 @@ class MovieRepositoryImpl implements MoviesRepository {
 
   @override
   Future<List<Movie>> getNowPlaying({int page = 1}) {
-    /// Delega la operación al datasource
-    /// Aquí se podría agregar lógica adicional como:
-    /// - Validación de parámetros
-    /// - Cache de resultados
-    /// - Transformaciones de datos
-    /// - Logging de operaciones
+
     return datasource.getNowPlaying(page: page);
   }
+   @override
+  Future<List<Movie>> getPopular({int page = 1}) {
+    return datasource.getPopular(page: page);
+  }
+   @override
+  Future<List<Movie>> getUpcoming({int page = 1}) {
+    return datasource.getUpcoming(page: page);
+  }
+
+   @override
+  Future<List<Movie>> getTopRated({int page = 1}) {
+    return datasource.getTopRated(page: page);
+  }
+  @override
+  Future<List<Movie>> getMexicanMovies({int page = 1}) {
+    return datasource.getMexicanMovies(page: page);
+  }
+
+
+
 }
